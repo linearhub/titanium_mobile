@@ -317,6 +317,7 @@ public abstract class TiViewProxy extends KrollProxy implements Handler.Callback
 						//by hscho@linearhub.com
 						if(TiApplication.getAppCurrentActivity() == null){
 							android.os.Process.killProcess(android.os.Process.myPid());
+							return true;
 						}
 						
 						// TiDimension needs a view to grab the window manager, so we'll just use the decorview of the current window
