@@ -539,8 +539,16 @@ public class ListSectionProxy extends ViewProxy{
 		if (isFilterOn()) {
 			applyFilter(getListView().getSearchText());
 		}
+		
 		//Notify adapter that data has changed.
-		adapter.notifyDataSetChanged();
+		if ( getListView() != null && getListView().getReverseMode() == true)
+		{
+			getListView().scrollAndNotifyDataSetChanged(offset, items.length);
+		}
+		else
+		{
+			adapter.notifyDataSetChanged();
+		}
 	}
 
 	private void handleSetItems(Object data) {

@@ -503,6 +503,28 @@ public class TiListView extends TiUIView implements OnSearchChangeListener {
 		}
 	}
 
+	public boolean getReverseMode()
+	{
+		return bReverseMode;
+	}
+
+	public void scrollAndNotifyDataSetChanged(int offset, int itemLength)
+	{
+		int nFirstVisibleItem = listView.getFirstVisiblePosition();
+		if(offset < nFirstVisibleItem){
+			int nScrollY = 0;
+	        View v = listView.getChildAt(0);
+	        if(v != null)
+	        	nScrollY = (int) v.getTop();
+	        else
+	        	nScrollY = 0;
+	        
+	        adapter.notifyDataSetChanged();
+	        
+	        listView.setSelectionFromTop(offset + itemLength, nScrollY);
+		}
+	}
+
 	public void processProperties(KrollDict d) {
 		
 		if (d.containsKey(TiC.PROPERTY_TEMPLATES)) {
