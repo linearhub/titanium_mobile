@@ -178,16 +178,22 @@ public class TiListView extends TiUIView implements OnSearchChangeListener {
 				}
 			}
 			
+			Log.d(TAG, "ListView OnLayout changed = " + changed + " adapter data count = " + adapter.getCount(), Log.DEBUG_MODE);
 			if ( bReverseMode == true )
 			{
+				Log.d(TAG, "ListView OnLayout 1", Log.DEBUG_MODE);
 				if ( sections.size() > 0 )
 				{
+					Log.d(TAG, "ListView OnLayout 2", Log.DEBUG_MODE);
 					ListSectionProxy section = null;
 					section = sections.get(0);
 					if ( section != null )
 					{
+						Log.d(TAG, "ListView OnLayout 3", Log.DEBUG_MODE);
 						if ( changed == true && bOnceScrollEnd == true )
 						{
+							Log.d(TAG, "ListView OnLayout 4", Log.DEBUG_MODE);
+							bOnceScrollEnd = false;
 							if ( adapter.getCount() > 0 )
 								scrollToItem(0, adapter.getCount() - 1, false);
 						}
