@@ -83,6 +83,7 @@ public class TiListView extends TiUIView implements OnSearchChangeListener {
 	private static final String TAG = "TiListView";
 
 	private static boolean bReverseMode = false;
+	private static boolean bOnceScrollEnd = true;
 
 	/* We cache properties that already applied to the recycled list tiem in ViewItem.java
 	 * However, since Android randomly selects a cached view to recycle, our cached properties
@@ -174,6 +175,23 @@ public class TiListView extends TiUIView implements OnSearchChangeListener {
 						selectionSet = true;
 					}
 
+				}
+			}
+			
+			if ( bReverseMode == true )
+			{
+				if ( sections.size() > 0 )
+				{
+					ListSectionProxy section = null;
+					section = sections.get(0);
+					if ( section != null )
+					{
+						if ( changed == true && bOnceScrollEnd == true )
+						{
+							if ( adapter.getCount() > 0 )
+								scrollToItem(0, adapter.getCount() - 1, false);
+						}
+					}
 				}
 			}
 		}
@@ -304,7 +322,7 @@ public class TiListView extends TiUIView implements OnSearchChangeListener {
 		
 		bReverseMode = ((ListViewProxy)proxy).getReverseMode();
 		if ( bReverseMode == true )
-			listView.setTranscriptMode(ListView.TRANSCRIPT_MODE_NORMAL);
+			listView.setTranscriptMode(ListView.TRANSCRIPT_MODE_DISABLED);
 
 		//init inflater
 		if (inflater == null) {
