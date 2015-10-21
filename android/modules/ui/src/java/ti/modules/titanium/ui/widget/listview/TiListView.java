@@ -82,6 +82,7 @@ public class TiListView extends TiUIView implements OnSearchChangeListener {
 	private RelativeLayout searchLayout;
 	private static final String TAG = "TiListView";
 
+	private static boolean bReverseMode = false;
 
 	/* We cache properties that already applied to the recycled list tiem in ViewItem.java
 	 * However, since Android randomly selects a cached view to recycle, our cached properties
@@ -182,7 +183,8 @@ public class TiListView extends TiUIView implements OnSearchChangeListener {
 	public class TiBaseAdapter extends BaseAdapter {
 
 		Activity context;
-		
+		protected boolean bReverseMode = false;
+
 		public TiBaseAdapter(Activity activity) {
 			context = activity;
 		}
@@ -300,6 +302,10 @@ public class TiListView extends TiUIView implements OnSearchChangeListener {
 		wrapper.addView(listView);
 		adapter = new TiBaseAdapter(activity);
 		
+		bReverseMode = ((ListViewProxy)proxy).getReverseMode();
+		if ( bReverseMode == true )
+			listView.setTranscriptMode(ListView.TRANSCRIPT_MODE_NORMAL);
+
 		//init inflater
 		if (inflater == null) {
 			inflater = (LayoutInflater)activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -466,6 +472,13 @@ public class TiListView extends TiUIView implements OnSearchChangeListener {
 		markers.add(new Pair<Integer, Integer>(sectionIndex, itemIndex));
 	}
 	
+	public void setReverseMode(boolean bMode)
+	{
+		if ( bReverseMode != bMode ){
+			bReverseMode = bMode;
+		}
+	}
+
 	public void processProperties(KrollDict d) {
 		
 		if (d.containsKey(TiC.PROPERTY_TEMPLATES)) {
@@ -581,6 +594,12 @@ public class TiListView extends TiUIView implements OnSearchChangeListener {
 		listView.addFooterView(footerView, null, false);
 
 		listView.setAdapter(adapter);
+		
+		if ( bReverseMode == true )
+		{
+			listView.setSelection( adapter.getCount()-1 );
+		}
+		
 		super.processProperties(d);
 		
 	}

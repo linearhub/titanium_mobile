@@ -62,6 +62,8 @@ public class ListViewProxy extends TiViewProxy {
 	private ArrayList<ListSectionProxy> preloadSections;
 	private ArrayList<HashMap<String, Integer>> preloadMarkers;
 	
+	private boolean bReverseMode = false;
+
 	public ListViewProxy() {
 		super();
 	}
@@ -187,7 +189,7 @@ public class ListViewProxy extends TiViewProxy {
 			}
 		}
 	}
-	
+
 	@Kroll.method
 	public void addMarker(Object marker) 
 	{
@@ -200,6 +202,22 @@ public class ListViewProxy extends TiViewProxy {
 				preloadMarkers.add(m);
 			}
 		}
+	}
+
+	@Kroll.method
+	public void setReverseMode(boolean bMode)
+	{
+		bReverseMode = bMode;
+		TiUIView listView = peekView();
+		if (listView != null) {
+			((TiListView)listView).setReverseMode(bReverseMode);
+		}
+	}
+
+	@Kroll.method
+	public boolean getReverseMode()
+	{
+		return bReverseMode;
 	}
 
 	@Override
