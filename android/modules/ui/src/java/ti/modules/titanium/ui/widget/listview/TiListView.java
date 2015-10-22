@@ -117,7 +117,7 @@ public class TiListView extends TiUIView implements OnSearchChangeListener {
 			// First check for a quick exit. listView can be null, such as if window closing.
 			// Starting with API 18, calling requestFocus() will trigger another layout pass of the listview,
 			// resulting in an infinite loop. Here we check if the view is already focused, and stop the loop.
-			Log.e(TAG, "ListView OnLayout changed = " + changed + " adapter data count = " + adapter.getCount(), Log.DEBUG_MODE);
+			Log.e(TAG, "ListView OnLayout changed = " + changed + " adapter data count = " + adapter.getCount());
 			
 			if (listView == null || (Build.VERSION.SDK_INT >= 18 && listView != null && !changed && viewFocused)) {
 				viewFocused = false;
@@ -182,18 +182,18 @@ public class TiListView extends TiUIView implements OnSearchChangeListener {
 			
 			if ( bReverseMode == true )
 			{
-				Log.e(TAG, "ListView OnLayout 1", Log.DEBUG_MODE);
+				Log.e(TAG, "ListView OnLayout 1");
 				if ( sections.size() > 0 )
 				{
-					Log.e(TAG, "ListView OnLayout 2", Log.DEBUG_MODE);
+					Log.e(TAG, "ListView OnLayout 2");
 					ListSectionProxy section = null;
 					section = sections.get(0);
 					if ( section != null )
 					{
-						Log.e(TAG, "ListView OnLayout 3", Log.DEBUG_MODE);
+						Log.e(TAG, "ListView OnLayout 3");
 						if ( changed == true && bOnceScrollEnd == true )
 						{
-							Log.e(TAG, "ListView OnLayout 4", Log.DEBUG_MODE);
+							Log.e(TAG, "ListView OnLayout 4");
 							bOnceScrollEnd = false;
 							if ( adapter.getCount() > 0 )
 								scrollToItem(0, adapter.getCount() - 1, false);
@@ -328,7 +328,7 @@ public class TiListView extends TiUIView implements OnSearchChangeListener {
 		adapter = new TiBaseAdapter(activity);
 		
 		bReverseMode = ((ListViewProxy)proxy).getReverseMode();
-		Log.e(TAG, "ListView.TiListView bReverseMode=" + bReverseMode, Log.DEBUG_MODE);
+		Log.e(TAG, "ListView.TiListView bReverseMode=" + bReverseMode);
 		if ( bReverseMode == true )
 			listView.setTranscriptMode(ListView.TRANSCRIPT_MODE_DISABLED);
 
@@ -503,7 +503,7 @@ public class TiListView extends TiUIView implements OnSearchChangeListener {
 		if ( bReverseMode != bMode ){
 			bReverseMode = bMode;
 		}
-		Log.e(TAG, "ListView.setReverseMode bReverseMode=" + bReverseMode, Log.DEBUG_MODE);
+		Log.e(TAG, "ListView.setReverseMode bReverseMode=" + bReverseMode);
 	}
 
 	public boolean getReverseMode()
