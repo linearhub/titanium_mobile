@@ -117,6 +117,8 @@ public class TiListView extends TiUIView implements OnSearchChangeListener {
 			// First check for a quick exit. listView can be null, such as if window closing.
 			// Starting with API 18, calling requestFocus() will trigger another layout pass of the listview,
 			// resulting in an infinite loop. Here we check if the view is already focused, and stop the loop.
+			Log.d(TAG, "ListView OnLayout changed = " + changed + " adapter data count = " + adapter.getCount(), Log.DEBUG_MODE);
+			
 			if (listView == null || (Build.VERSION.SDK_INT >= 18 && listView != null && !changed && viewFocused)) {
 				viewFocused = false;
 				super.onLayout(changed, left, top, right, bottom);
@@ -178,7 +180,6 @@ public class TiListView extends TiUIView implements OnSearchChangeListener {
 				}
 			}
 			
-			Log.d(TAG, "ListView OnLayout changed = " + changed + " adapter data count = " + adapter.getCount(), Log.DEBUG_MODE);
 			if ( bReverseMode == true )
 			{
 				Log.d(TAG, "ListView OnLayout 1", Log.DEBUG_MODE);
