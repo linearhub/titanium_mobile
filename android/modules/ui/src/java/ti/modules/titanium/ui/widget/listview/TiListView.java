@@ -117,8 +117,6 @@ public class TiListView extends TiUIView implements OnSearchChangeListener {
 			// First check for a quick exit. listView can be null, such as if window closing.
 			// Starting with API 18, calling requestFocus() will trigger another layout pass of the listview,
 			// resulting in an infinite loop. Here we check if the view is already focused, and stop the loop.
-			Log.e(TAG, "ListView OnLayout changed = " + changed + " adapter data count = " + adapter.getCount());
-			
 			if (listView == null || (Build.VERSION.SDK_INT >= 18 && listView != null && !changed && viewFocused)) {
 				viewFocused = false;
 				super.onLayout(changed, left, top, right, bottom);
@@ -182,15 +180,13 @@ public class TiListView extends TiUIView implements OnSearchChangeListener {
 			
 			if ( bReverseMode == true )
 			{
-				Log.e(TAG, "ListView OnLayout 1");
 				if ( sections.size() > 0 )
 				{
-					Log.e(TAG, "ListView OnLayout 2");
 					ListSectionProxy section = null;
 					section = sections.get(0);
 					if ( section != null )
 					{
-						Log.e(TAG, "ListView OnLayout 3");
+						Log.e(TAG, "ListView OnLayout changed = " + changed + " adapter data count = " + adapter.getCount());
 						if ( changed == true && bOnceScrollEnd == true )
 						{
 							Log.e(TAG, "ListView OnLayout 4");
@@ -514,6 +510,7 @@ public class TiListView extends TiUIView implements OnSearchChangeListener {
 	public void scrollAndNotifyDataSetChanged(int offset, int itemLength)
 	{
 		int nFirstVisibleItem = listView.getFirstVisiblePosition();
+		Log.e(TAG, "ListView scrollAndNotifyDataSetChanged offset=" + offset + " itemLength=" + itemLength + " nFirstVisibleItem=" + nFirstVisibleItem);
 		if(offset < nFirstVisibleItem){
 			int nScrollY = 0;
 	        View v = listView.getChildAt(0);
@@ -524,6 +521,7 @@ public class TiListView extends TiUIView implements OnSearchChangeListener {
 	        
 	        adapter.notifyDataSetChanged();
 	        
+	        Log.e(TAG, "ListView scrollAndNotifyDataSetChanged nScrollY=" + nScrollY);
 	        listView.setSelectionFromTop(offset + itemLength, nScrollY);
 		}
 	}
