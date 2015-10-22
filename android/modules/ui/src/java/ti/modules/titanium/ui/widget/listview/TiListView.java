@@ -522,7 +522,7 @@ public class TiListView extends TiUIView implements OnSearchChangeListener {
 	        adapter.notifyDataSetChanged();
 	        
 	        Log.e(TAG, "ListView scrollAndNotifyDataSetChanged nScrollY=" + nScrollY);
-	        listView.setSelectionFromTop(offset + itemLength, nScrollY);
+	        listView.setSelectionFromTop(nFirstVisibleItem + itemLength, nScrollY);
 		}
 	}
 
