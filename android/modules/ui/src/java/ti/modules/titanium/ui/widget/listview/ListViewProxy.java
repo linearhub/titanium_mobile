@@ -66,9 +66,11 @@ public class ListViewProxy extends TiViewProxy {
 
 	public ListViewProxy() {
 		super();
+		Log.e(TAG, "ListView.ListViewProxy", Log.DEBUG_MODE);
 	}
 
 	public TiUIView createView(Activity activity) {
+		Log.e(TAG, "ListView.ListViewProxy createView", Log.DEBUG_MODE);
 		return new TiListView(this, activity);
 	}
 	
@@ -209,6 +211,7 @@ public class ListViewProxy extends TiViewProxy {
 	{
 		bReverseMode = bMode;
 		TiUIView listView = peekView();
+		Log.e(TAG, "ListView.setReverseMode bReverseMode=" + bReverseMode + " listView=" + listView, Log.DEBUG_MODE);
 		if (listView != null) {
 			((TiListView)listView).setReverseMode(bReverseMode);
 		}
