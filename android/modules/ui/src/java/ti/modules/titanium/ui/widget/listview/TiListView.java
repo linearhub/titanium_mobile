@@ -361,10 +361,10 @@ public class TiListView extends TiUIView implements OnSearchChangeListener {
 						bBottomState = true;
 						if(_firstVisibleItem+_visibleItemCount >= _totalItemCount-1)
 						{
-							bottomState = true;
+							bBottomState = true;
 						}
 						else{
-							bottomState = false;
+							bBottomState = false;
 						}
 						
 						Log.e(TAG, "ListView onScrollStateChanged" + " bBottomState=" + bBottomState);						
