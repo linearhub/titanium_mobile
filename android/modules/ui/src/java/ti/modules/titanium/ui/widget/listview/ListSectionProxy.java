@@ -541,7 +541,6 @@ public class ListSectionProxy extends ViewProxy{
 		}
 		
 		//Notify adapter that data has changed.
-		Log.e(TAG, "ListView processData getListView()=" + getListView() + " getReverseMode=" + getListView().getReverseMode());
 		if ( getListView() != null && getListView().getReverseMode() == true)
 		{
 			getListView().scrollAndNotifyDataSetChanged(offset, items.length);

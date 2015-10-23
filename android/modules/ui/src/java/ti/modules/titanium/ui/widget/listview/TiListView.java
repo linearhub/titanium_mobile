@@ -323,10 +323,10 @@ public class TiListView extends TiUIView implements OnSearchChangeListener {
 		wrapper.addView(listView);
 		adapter = new TiBaseAdapter(activity);
 		
-		bReverseMode = ((ListViewProxy)proxy).getReverseMode();
-		Log.e(TAG, "ListView.TiListView bReverseMode=" + bReverseMode);
-		if ( bReverseMode == true )
-			listView.setTranscriptMode(ListView.TRANSCRIPT_MODE_DISABLED);
+//		bReverseMode = ((ListViewProxy)proxy).getReverseMode();
+//		Log.e(TAG, "ListView.TiListView bReverseMode=" + bReverseMode);
+//		if ( bReverseMode == true )
+//			listView.setTranscriptMode(ListView.TRANSCRIPT_MODE_DISABLED);
 
 		//init inflater
 		if (inflater == null) {
@@ -499,7 +499,6 @@ public class TiListView extends TiUIView implements OnSearchChangeListener {
 		if ( bReverseMode != bMode ){
 			bReverseMode = bMode;
 		}
-		Log.e(TAG, "ListView.setReverseMode bReverseMode=" + bReverseMode);
 	}
 
 	public boolean getReverseMode()
@@ -510,7 +509,6 @@ public class TiListView extends TiUIView implements OnSearchChangeListener {
 	public void scrollAndNotifyDataSetChanged(int offset, int itemLength)
 	{
 		int nFirstVisibleItem = listView.getFirstVisiblePosition();
-		Log.e(TAG, "ListView scrollAndNotifyDataSetChanged offset=" + offset + " itemLength=" + itemLength + " nFirstVisibleItem=" + nFirstVisibleItem);
 		if(offset < nFirstVisibleItem){
 			int nScrollY = 0;
 	        View v = listView.getChildAt(0);
@@ -521,7 +519,6 @@ public class TiListView extends TiUIView implements OnSearchChangeListener {
 	        
 	        adapter.notifyDataSetChanged();
 	        
-	        Log.e(TAG, "ListView scrollAndNotifyDataSetChanged nScrollY=" + nScrollY);
 	        listView.setSelectionFromTop(nFirstVisibleItem + itemLength, nScrollY);
 		}
 	}
