@@ -83,7 +83,7 @@ public class TiListView extends TiUIView implements OnSearchChangeListener {
 	private static final String TAG = "TiListView";
 
 	private boolean bReverseMode = false;
-	private boolean bOnceScrollEnd = true;
+	private boolean bBottomState = true;
 
 	/* We cache properties that already applied to the recycled list tiem in ViewItem.java
 	 * However, since Android randomly selects a cached view to recycle, our cached properties
@@ -178,7 +178,8 @@ public class TiListView extends TiUIView implements OnSearchChangeListener {
 				}
 			}
 			
-			if ( bReverseMode == true )
+			Log.e(TAG, "ListView OnLayout changed=" + changed + " bReverseMode=" + bReverseMode + " bBottomState=" + bBottomState);
+			if ( changed == true && bReverseMode == true && bBottomState == true )
 			{
 				if ( sections.size() > 0 )
 				{
@@ -186,14 +187,8 @@ public class TiListView extends TiUIView implements OnSearchChangeListener {
 					section = sections.get(0);
 					if ( section != null )
 					{
-						Log.e(TAG, "ListView OnLayout changed = " + changed + " adapter data count = " + adapter.getCount());
-						if ( changed == true && bOnceScrollEnd == true )
-						{
-							Log.e(TAG, "ListView OnLayout 4");
-							bOnceScrollEnd = false;
-							if ( adapter.getCount() > 0 )
-								scrollToItem(0, adapter.getCount() - 1, false);
-						}
+						if ( adapter.getCount() > 0 )
+							scrollToItem(0, adapter.getCount() - 1, false);
 					}
 				}
 			}
@@ -204,7 +199,6 @@ public class TiListView extends TiUIView implements OnSearchChangeListener {
 	public class TiBaseAdapter extends BaseAdapter {
 
 		Activity context;
-		protected boolean bReverseMode = false;
 
 		public TiBaseAdapter(Activity activity) {
 			context = activity;
@@ -323,8 +317,6 @@ public class TiListView extends TiUIView implements OnSearchChangeListener {
 		wrapper.addView(listView);
 		adapter = new TiBaseAdapter(activity);
 		
-		bReverseMode = ((ListViewProxy)proxy).getReverseMode();
-		Log.e(TAG, "ListView.TiListView bReverseMode=" + bReverseMode);
 		if ( bReverseMode == true )
 			listView.setTranscriptMode(ListView.TRANSCRIPT_MODE_DISABLED);
 
@@ -345,6 +337,7 @@ public class TiListView extends TiUIView implements OnSearchChangeListener {
 		{
 			private int _firstVisibleItem = 0;
 			private int _visibleItemCount = 0;
+			private int _totalItemCount = 0;
 			private boolean canFireScrollStart = true;
 			private boolean canFireScrollEnd = false;
 
@@ -356,6 +349,17 @@ public class TiListView extends TiUIView implements OnSearchChangeListener {
 					eventName = TiC.EVENT_SCROLLEND;
 					canFireScrollEnd = false;
 					canFireScrollStart = true;
+					
+					if(bReverseMode==true)
+					{
+						if(_firstVisibleItem+_visibleItemCount >= _totalItemCount-1)
+						{
+							if(bBottomState!=true){
+								bBottomState = true;
+								((ListViewProxy)proxy).setBottomState(true);
+							}
+						}
+					}
 				} else if (scrollState == OnScrollListener.SCROLL_STATE_TOUCH_SCROLL && canFireScrollStart) {
 					eventName = TiC.EVENT_SCROLLSTART;					
 					canFireScrollEnd = true;
@@ -501,14 +505,22 @@ public class TiListView extends TiUIView implements OnSearchChangeListener {
 	
 	public void setReverseMode(boolean bMode)
 	{
-		if ( bReverseMode != bMode ){
-			bReverseMode = bMode;
-		}
+		bReverseMode = bMode;
 	}
 
 	public boolean getReverseMode()
 	{
 		return bReverseMode;
+	}
+
+	public void setBottomState(boolean bState)
+	{
+		bBottomState = bState;
+	}
+
+	public boolean getBottomState()
+	{
+		return bBottomState;
 	}
 
 	public void scrollAndNotifyDataSetChanged(int offset, int itemLength)

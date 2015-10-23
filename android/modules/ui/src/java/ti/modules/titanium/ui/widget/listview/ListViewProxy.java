@@ -63,6 +63,7 @@ public class ListViewProxy extends TiViewProxy {
 	private ArrayList<HashMap<String, Integer>> preloadMarkers;
 	
 	private boolean bReverseMode = false;
+	private boolean bBottomState = false;
 
 	public ListViewProxy() {
 		super();
@@ -210,7 +211,7 @@ public class ListViewProxy extends TiViewProxy {
 		bReverseMode = bMode;
 		TiUIView listView = peekView();
 		if (listView != null) {
-			((TiListView)listView).setReverseMode(bReverseMode);
+			((TiListView)listView).setReverseMode(bMode);
 		}
 	}
 
@@ -220,6 +221,22 @@ public class ListViewProxy extends TiViewProxy {
 		return bReverseMode;
 	}
 
+	@Kroll.method
+	public void setBottomState(boolean bBottom)
+	{
+		bBottomState = bBottom;
+		TiUIView listView = peekView();
+		if (listView != null) {
+			((TiListView)listView).setBottomState(bBottom);
+		}
+	}
+
+	@Kroll.method
+	public boolean getBottomState()
+	{
+		return bBottomState;
+	}
+	
 	@Override
 	public boolean handleMessage(final Message msg) 	{
 
