@@ -174,21 +174,26 @@ public class TiListView extends TiUIView implements OnSearchChangeListener {
 						((EditText)focusedView).setSelection(cursorPosition);
 						selectionSet = true;
 					}
-
 				}
 			}
 			
-			Log.e(TAG, "ListView OnLayout changed=" + changed + " bReverseMode=" + bReverseMode + " bBottomState=" + bBottomState);
-			if ( changed == true && bReverseMode == true && bBottomState == true )
+			if (bReverseMode == true )
 			{
-				if ( sections.size() > 0 )
+				Log.e(TAG, "ListView OnLayout changed=" + changed + " bBottomState=" + bBottomState);
+				if ( changed == true && bBottomState == true )
 				{
-					ListSectionProxy section = null;
-					section = sections.get(0);
-					if ( section != null )
+					if ( sections.size() > 0 )
 					{
-						if ( adapter.getCount() > 0 )
-							scrollToItem(0, adapter.getCount() - 1, false);
+						ListSectionProxy section = null;
+						section = sections.get(0);
+						if ( section != null )
+						{
+							if ( adapter.getCount() > 0 )
+							{
+								Log.e(TAG, "ListView scrollToItem bottom");
+								scrollToItem(0, adapter.getCount() - 1, false);
+							}
+						}
 					}
 				}
 			}
@@ -353,13 +358,17 @@ public class TiListView extends TiUIView implements OnSearchChangeListener {
 					
 					if(bReverseMode==true)
 					{
+						bBottomState = true;
 						if(_firstVisibleItem+_visibleItemCount >= _totalItemCount-1)
 						{
-							if(bBottomState!=true){
-								bBottomState = true;
-								((ListViewProxy)fProxy).setBottomState(true);
-							}
+							bottomState = true;
 						}
+						else{
+							bottomState = false;
+						}
+						
+						Log.e(TAG, "ListView onScrollStateChanged" + " bBottomState=" + bBottomState);						
+						((ListViewProxy)fProxy).setBottomState(bBottomState);
 					}
 				} else if (scrollState == OnScrollListener.SCROLL_STATE_TOUCH_SCROLL && canFireScrollStart) {
 					eventName = TiC.EVENT_SCROLLSTART;					
