@@ -317,6 +317,7 @@ public class TiListView extends TiUIView implements OnSearchChangeListener {
 		wrapper.addView(listView);
 		adapter = new TiBaseAdapter(activity);
 		
+		bReverseMode = ((ListViewProxy)proxy).getReverseMode();
 		if ( bReverseMode == true )
 			listView.setTranscriptMode(ListView.TRANSCRIPT_MODE_DISABLED);
 
