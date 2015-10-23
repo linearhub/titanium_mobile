@@ -177,21 +177,22 @@ public class TiListView extends TiUIView implements OnSearchChangeListener {
 				}
 			}
 			
-			if (bReverseMode == true )
-			{
+			if (bReverseMode == true ) {
 				Log.e(TAG, "ListView OnLayout changed=" + changed + " bBottomState=" + bBottomState);
-				if ( changed == true && bBottomState == true )
-				{
-					if ( sections.size() > 0 )
-					{
+				if ( changed == true && bBottomState == true ) {
+					if ( sections.size() > 0 ) {
 						ListSectionProxy section = null;
 						section = sections.get(0);
-						if ( section != null )
-						{
-							if ( adapter.getCount() > 0 )
-							{
+						if ( section != null ) {
+							if ( adapter.getCount() > 0 ) {
 								Log.e(TAG, "ListView scrollToItem bottom");
-								scrollToItem(0, adapter.getCount() - 1, false);
+								final int position = findItemPosition(0, adapter.getCount() - 1);
+								if (position > -1) {
+									scrollToItem(0, adapter.getCount() - 1, false);
+								}
+								else{
+									scrollToItem(0, adapter.getCount() - 2, false);
+								}
 							}
 						}
 					}
@@ -358,7 +359,6 @@ public class TiListView extends TiUIView implements OnSearchChangeListener {
 					
 					if(bReverseMode==true)
 					{
-						bBottomState = true;
 						if(_firstVisibleItem+_visibleItemCount >= _totalItemCount-1)
 						{
 							bBottomState = true;
@@ -409,6 +409,7 @@ public class TiListView extends TiUIView implements OnSearchChangeListener {
 			{
 				_firstVisibleItem = firstVisibleItem;
 				_visibleItemCount = visibleItemCount;
+				_totalItemCount = totalItemCount;
 				if(bReverseMode==true)
 				{
 					Log.e(TAG, "ListView onScroll" + " firstVisibleItem=" + firstVisibleItem  +
