@@ -356,7 +356,7 @@ public class TiListView extends TiUIView implements OnSearchChangeListener {
 						{
 							if(bBottomState!=true){
 								bBottomState = true;
-								((ListViewProxy)proxy).setBottomState(true);
+								((ListViewProxy)fProxy).setBottomState(true);
 							}
 						}
 					}
