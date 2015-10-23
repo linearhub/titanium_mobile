@@ -395,8 +395,11 @@ public class TiListView extends TiUIView implements OnSearchChangeListener {
 			{
 				_firstVisibleItem = firstVisibleItem;
 				_visibleItemCount = visibleItemCount;
-				Log.e(TAG, "ListView onScroll" + " firstVisibleItem=" + firstVisibleItem  +
-						" visibleItemCount=" + visibleItemCount + " totalItemCount=" + totalItemCount);
+				if(bReverseMode==true)
+				{
+					Log.e(TAG, "ListView onScroll" + " firstVisibleItem=" + firstVisibleItem  +
+							" visibleItemCount=" + visibleItemCount + " totalItemCount=" + totalItemCount);
+				}
 			}
 		});
 		
@@ -524,6 +527,9 @@ public class TiListView extends TiUIView implements OnSearchChangeListener {
 	        
 	        Log.e(TAG, "ListView scrollAndNotifyDataSetChanged nScrollY=" + nScrollY);
 	        listView.setSelectionFromTop(nFirstVisibleItem + itemLength, nScrollY);
+		}
+		else{
+			adapter.notifyDataSetChanged();
 		}
 	}
 
