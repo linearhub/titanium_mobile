@@ -82,8 +82,8 @@ public class TiListView extends TiUIView implements OnSearchChangeListener {
 	private RelativeLayout searchLayout;
 	private static final String TAG = "TiListView";
 
-	private static boolean bReverseMode = false;
-	private static boolean bOnceScrollEnd = true;
+	private boolean bReverseMode = false;
+	private boolean bOnceScrollEnd = true;
 
 	/* We cache properties that already applied to the recycled list tiem in ViewItem.java
 	 * However, since Android randomly selects a cached view to recycle, our cached properties
