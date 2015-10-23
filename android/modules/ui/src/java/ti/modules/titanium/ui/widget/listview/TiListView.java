@@ -511,6 +511,7 @@ public class TiListView extends TiUIView implements OnSearchChangeListener {
 	public void scrollAndNotifyDataSetChanged(int offset, int itemLength)
 	{
 		int nFirstVisibleItem = listView.getFirstVisiblePosition();
+		Log.e(TAG, "ListView scrollAndNotifyDataSetChanged offset=" + offset + " itemLength=" + itemLength + " nFirstVisibleItem=" + nFirstVisibleItem);
 		if(offset < nFirstVisibleItem){
 			int nScrollY = 0;
 	        View v = listView.getChildAt(0);
@@ -521,6 +522,7 @@ public class TiListView extends TiUIView implements OnSearchChangeListener {
 	        
 	        adapter.notifyDataSetChanged();
 	        
+	        Log.e(TAG, "ListView scrollAndNotifyDataSetChanged nScrollY=" + nScrollY);
 	        listView.setSelectionFromTop(nFirstVisibleItem + itemLength, nScrollY);
 		}
 	}
