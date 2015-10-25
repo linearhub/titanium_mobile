@@ -410,11 +410,6 @@ public class TiListView extends TiUIView implements OnSearchChangeListener {
 				_firstVisibleItem = firstVisibleItem;
 				_visibleItemCount = visibleItemCount;
 				_totalItemCount = totalItemCount;
-				if(bReverseMode==true)
-				{
-					Log.e(TAG, "ListView onScroll" + " firstVisibleItem=" + firstVisibleItem  +
-							" visibleItemCount=" + visibleItemCount + " totalItemCount=" + totalItemCount);
-				}
 			}
 		});
 		
