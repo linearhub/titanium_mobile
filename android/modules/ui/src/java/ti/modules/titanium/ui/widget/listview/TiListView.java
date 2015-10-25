@@ -538,7 +538,7 @@ public class TiListView extends TiUIView implements OnSearchChangeListener {
 	{
 		int nFirstVisibleItem = listView.getFirstVisiblePosition();
 		Log.e(TAG, "ListView scrollAndNotifyDataSetChanged offset=" + offset + " itemLength=" + itemLength + " nFirstVisibleItem=" + nFirstVisibleItem);
-		if(offset < nFirstVisibleItem){
+		if(offset <= nFirstVisibleItem){
 			int nScrollY = 0;
 	        View v = listView.getChildAt(0);
 	        if(v != null)
