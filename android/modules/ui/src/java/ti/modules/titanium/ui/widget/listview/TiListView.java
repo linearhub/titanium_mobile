@@ -178,14 +178,14 @@ public class TiListView extends TiUIView implements OnSearchChangeListener {
 			}
 			
 			if (bReverseMode == true ) {
-				Log.e(TAG, "ListView OnLayout changed=" + changed + " bBottomState=" + bBottomState);
+				//Log.e(TAG, "ListView OnLayout changed=" + changed + " bBottomState=" + bBottomState);
 				if ( changed == true && bBottomState == true ) {
 					if ( sections.size() > 0 ) {
 						ListSectionProxy section = null;
 						section = sections.get(0);
 						if ( section != null ) {
 							if ( adapter.getCount() > 0 ) {
-								Log.e(TAG, "ListView scrollToItem bottom");
+								//Log.e(TAG, "ListView scrollToItem bottom");
 								final int position = findItemPosition(0, adapter.getCount() - 1);
 								if (position > -1) {
 									scrollToItem(0, adapter.getCount() - 1, false);
@@ -367,7 +367,7 @@ public class TiListView extends TiUIView implements OnSearchChangeListener {
 							bBottomState = false;
 						}
 						
-						Log.e(TAG, "ListView onScrollStateChanged" + " bBottomState=" + bBottomState);						
+						//Log.e(TAG, "ListView onScrollStateChanged" + " bBottomState=" + bBottomState);						
 						((ListViewProxy)fProxy).setBottomState(bBottomState);
 					}
 				} else if (scrollState == OnScrollListener.SCROLL_STATE_TOUCH_SCROLL && canFireScrollStart) {
@@ -532,7 +532,7 @@ public class TiListView extends TiUIView implements OnSearchChangeListener {
 	public void scrollAndNotifyDataSetChanged(int offset, int itemLength)
 	{
 		int nFirstVisibleItem = listView.getFirstVisiblePosition();
-		Log.e(TAG, "ListView scrollAndNotifyDataSetChanged offset=" + offset + " itemLength=" + itemLength + " nFirstVisibleItem=" + nFirstVisibleItem);
+		//Log.e(TAG, "ListView scrollAndNotifyDataSetChanged offset=" + offset + " itemLength=" + itemLength + " nFirstVisibleItem=" + nFirstVisibleItem);
 		if(offset-1 <= nFirstVisibleItem){
 			int nScrollIndex = nFirstVisibleItem + itemLength;
 			int nScrollY = 0;
@@ -548,7 +548,7 @@ public class TiListView extends TiUIView implements OnSearchChangeListener {
 	        
 	        adapter.notifyDataSetChanged();
 	        
-	        Log.e(TAG, "ListView scrollAndNotifyDataSetChanged" + " nScrollIndex=" + nScrollIndex + " nScrollY=" + nScrollY);
+	        //Log.e(TAG, "ListView scrollAndNotifyDataSetChanged" + " nScrollIndex=" + nScrollIndex + " nScrollY=" + nScrollY);
 	        listView.setSelectionFromTop(nScrollIndex, nScrollY);
 		}
 		else{
