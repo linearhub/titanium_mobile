@@ -21,6 +21,9 @@
     NSMutableArray *_markerArray;
     pthread_mutex_t _operationQueueMutex;
     pthread_rwlock_t _markerLock;
+    
+    bool bReverseMode;
+    bool isBottom;
 }
 
 - (id)init
@@ -32,8 +35,45 @@
         _markerArray = [[NSMutableArray alloc] initWithCapacity:4];
         pthread_mutex_init(&_operationQueueMutex,NULL);
         pthread_rwlock_init(&_markerLock,NULL);
+ 
+        bReverseMode = false;
+        isBottom = false;
     }
     return self;
+}
+
+- (void) setReverseMode:(id)bMode
+{
+    bReverseMode = [TiUtils boolValue:bMode];
+    if ( self.listView != nil )
+        [self.listView setReverseMode:bReverseMode];
+}
+
+- (bool)getReverseMode
+{
+    return bReverseMode;
+}
+
+- (void) setBottomState:(id)bState
+{
+    isBottom = [TiUtils boolValue:bState];
+}
+
+- (bool)getBottomState
+{
+    return isBottom;
+}
+
+- (int)getInsertItemsCountForSection:(NSUInteger)index
+{
+    if (index < [_sections count]) {
+        TiUIListSectionProxy * sectionProxy = [_sections objectAtIndex:index];
+        if ( sectionProxy != nil )
+            return sectionProxy.getInsertItemCount;
+        else
+            return 0;
+    }
+    return 0;
 }
 
 -(void)_initWithProperties:(NSDictionary *)properties
@@ -259,6 +299,7 @@
 		[_sections enumerateObjectsUsingBlock:^(TiUIListSectionProxy *section, NSUInteger idx, BOOL *stop) {
 			section.delegate = self;
 			section.sectionIndex = idx;
+			[section setReverseMode:bReverseMode];
 		}];
 		[tableView reloadData];
 		[self contentsWillChange];

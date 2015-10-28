@@ -17,6 +17,8 @@
 
 @implementation TiUIListSectionProxy {
 	NSMutableArray *_items;
+	
+	bool bReverseMode;
 }
 
 @synthesize delegate = _delegate;
@@ -29,6 +31,8 @@
     self = [super init];
     if (self) {
 		_items = [[NSMutableArray alloc] initWithCapacity:20];
+		
+		bReverseMode = false;
     }
     return self;
 }
@@ -40,6 +44,11 @@
 	[_headerTitle release];
 	[_footerTitle release];
 	[super dealloc];
+}
+
+- (void) setReverseMode:(bool)bMode
+{
+    bReverseMode = bMode;
 }
 
 -(NSString*)apiName
@@ -377,6 +386,38 @@
         }];
     }
 }
+
+- (void)updateItems:(id)args
+{
+    DebugLog(@"[INFO] ListSectionProxy : Called UpdateItems", DEBUG);
+    ENSURE_ARG_COUNT(args, 2);
+    NSArray *itemIndexs = [args objectAtIndex:0];
+    NSArray *items = [args objectAtIndex:1];
+    ENSURE_TYPE_OR_NIL(items,NSArray);
+    NSDictionary *properties = [args count] > 2 ? [args objectAtIndex:2] : nil;
+    UITableViewRowAnimation animation = [TiUIListView animationStyleForProperties:properties];
+    
+    [self.dispatcher dispatchUpdateAction:^(UITableView *tableView) {
+        if ( [itemIndexs count] != [items count] ) {
+            DebugLog(@"[WARN] ListView: update items index size and item size mismatch");
+            return;
+        }
+        
+        NSUInteger count = [itemIndexs count];
+        NSMutableArray *indexPaths = [[NSMutableArray alloc] initWithCapacity:count];
+        
+        for( int i = 0; i < count; i++ )
+        {
+            NSInteger updateitemindex = [TiUtils intValue:[itemIndexs objectAtIndex:i]];
+            [indexPaths addObject:[NSIndexPath indexPathForRow:updateitemindex inSection:_sectionIndex]];
+            [_items replaceObjectAtIndex:updateitemindex withObject:[items objectAtIndex:i]];
+        }
+        
+        [tableView reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationNone];
+        [indexPaths release];
+    }];
+}
+
 
 #pragma mark - TiUIListViewDelegate
 

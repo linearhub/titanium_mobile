@@ -68,6 +68,10 @@ static TiViewProxy * FindViewProxyWithBindIdContainingPoint(UIView *view, CGPoin
     BOOL canFireScrollStart;
     BOOL canFireScrollEnd;
     BOOL isScrollingToTop;
+    
+    bool bReverseMode;
+    bool isBottom;
+    int nInsertItemCount;
 }
 
 - (id)init
@@ -78,6 +82,11 @@ static TiViewProxy * FindViewProxyWithBindIdContainingPoint(UIView *view, CGPoin
         canFireScrollStart = YES;
         _defaultItemTemplate = [[NSNumber numberWithUnsignedInteger:UITableViewCellStyleDefault] retain];
         _defaultSeparatorInsets = UIEdgeInsetsZero;
+        
+        bReverseMode = false;
+        isBottom = false;
+        nInsertItemCount = 0;
+        visibleIndexPath = nil;
     }
     return self;
 }
@@ -112,6 +121,21 @@ static TiViewProxy * FindViewProxyWithBindIdContainingPoint(UIView *view, CGPoin
     RELEASE_TO_NIL(_refreshControlProxy);
 #endif
     [super dealloc];
+}
+
+-(void)setReverseMode:(bool)bMode
+{
+    bReverseMode = bMode;
+}
+
+-(void)setBottomState:(bool)bState
+{
+    isBottom = bState;
+}
+
+-(void)setInsertItemCount:(int)count
+{
+    nInsertItemCount = count;
 }
 
 -(TiViewProxy*)initWrapperProxy
@@ -225,6 +249,23 @@ static TiViewProxy * FindViewProxyWithBindIdContainingPoint(UIView *view, CGPoin
     if (_pullViewWrapper != nil) {
         _pullViewWrapper.frame = CGRectMake(0.0f, 0.0f - bounds.size.height, bounds.size.width, bounds.size.height);
         [_pullViewProxy parentSizeWillChange];
+    }
+    
+    if ( self.listViewProxy.getReverseMode == true )
+    {
+    	DebugLog(@"[INFO] ListView : getBottomState = %d", self.listViewProxy.getBottomState, DEBUG);
+    	if (self.listViewProxy.getBottomState == true)
+    	{
+	        if ( _tableView != nil && [_tableView numberOfSections] > 0 && [_tableView numberOfRowsInSection:0] > 0)
+	        {
+                [_tableView beginUpdates];
+                NSIndexPath *scrollIndexPath = [NSIndexPath indexPathForRow:[_tableView numberOfRowsInSection:0]-1 inSection:0];
+                DebugLog(@"[INFO] ListView : tableView Count = %d, indexPath = %@", [_tableView numberOfRowsInSection:0], scrollIndexPath.debugDescription, DEBUG);
+                if ( scrollIndexPath != nil )
+                    [_tableView scrollToRowAtIndexPath:scrollIndexPath atScrollPosition:UITableViewScrollPositionBottom animated:NO];
+                [_tableView endUpdates];
+	        }
+    	}
     }
 }
 
@@ -1738,8 +1779,40 @@ static TiViewProxy * FindViewProxyWithBindIdContainingPoint(UIView *view, CGPoin
     [self fireScrollStart: (UITableView*)scrollView];
 }
 
+- (void)checkBottomState
+{
+    if ( self.listViewProxy.getReverseMode == true )
+    {
+    	DebugLog(@"[INFO] listView: scrollViewDidEndDragging", DEBUG);
+    	
+    	int nVisibleRow = 0;
+        NSArray *visibleRows = [_tableView indexPathsForVisibleRows];
+        
+        if ( visibleRows != nil )
+        {
+            for( int i = 0; i < visibleRows.count; i++ )
+            {
+                int tempRow = [visibleRows[i] row];
+                if ( nVisibleRow < tempRow )
+                    nVisibleRow = tempRow;
+            }
+        }
+        if ( _tableView != nil && [_tableView numberOfSections] > 0 )
+        {
+            if ( nVisibleRow >= ([_tableView numberOfRowsInSection:0]-1)){
+                isBottom = true;
+            }
+            else{
+                isBottom = false;
+            }
+        }
+    }
+}
+
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
 {
+	[checkBottomState];
+	
     if(!decelerate) {
         [self fireScrollEnd:(UITableView *)scrollView];
     }
@@ -1754,6 +1827,8 @@ static TiViewProxy * FindViewProxyWithBindIdContainingPoint(UIView *view, CGPoin
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
+	[checkBottomState];
+	
     [[ImageLoader sharedLoader] resume];
     if(isScrollingToTop) {
         isScrollingToTop = NO;

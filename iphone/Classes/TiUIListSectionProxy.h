@@ -31,6 +31,8 @@
 - (void) deleteItemAtIndex:(NSUInteger)index;
 - (void) addItem:(NSDictionary*)item atIndex:(NSUInteger)index;
 
+- (void) setReverseMode:(bool)bMode;
+
 // Public API
 @property (nonatomic, readonly) NSUInteger itemCount;
 @property (nonatomic, readonly) NSArray *items;
