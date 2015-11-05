@@ -22,8 +22,8 @@
     pthread_mutex_t _operationQueueMutex;
     pthread_rwlock_t _markerLock;
     
-    bool bReverseMode;
-    bool isBottom;
+    BOOL bReverseMode;
+    BOOL isBottom;
 }
 
 - (id)init
@@ -49,9 +49,9 @@
         [self.listView setReverseMode:bReverseMode];
 }
 
-- (bool)getReverseMode
+- (BOOL)getReverseMode:(id)unused
 {
-    return bReverseMode;
+    return (bReverseMode==true ? YES : NO);
 }
 
 - (void) setBottomState:(id)bState
@@ -59,12 +59,12 @@
     isBottom = [TiUtils boolValue:bState];
 }
 
-- (bool)getBottomState
+- (BOOL)getBottomState:(id)unused
 {
-    return isBottom;
+    return (isBottom==true ? YES : NO);
 }
 
-- (int)getInsertItemsCountForSection:(NSUInteger)index
+- (NSUInteger)getInsertItemsCountForSection:(NSUInteger)index
 {
     if (index < [_sections count]) {
         TiUIListSectionProxy * sectionProxy = [_sections objectAtIndex:index];

@@ -23,10 +23,10 @@
 - (void) setMarker:(id)args;
 
 - (void) setReverseMode:(id)bMode;
-- (bool) getReverseMode;
+- (BOOL) getReverseMode:(id)unused;
 - (void) setBottomState:(id)bState;
-- (bool) getBottomState;
-- (int) getInsertItemsCountForSection:(NSUInteger)index;
+- (BOOL) getBottomState:(id)unused;
+- (NSUInteger) getInsertItemsCountForSection:(NSUInteger)index;
 @end
 
 @interface TiUIListViewProxy (internal)

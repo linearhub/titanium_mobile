@@ -32,6 +32,8 @@
 - (void) addItem:(NSDictionary*)item atIndex:(NSUInteger)index;
 
 - (void) setReverseMode:(bool)bMode;
+- (NSUInteger) getInsertItemCount;
+
 
 // Public API
 @property (nonatomic, readonly) NSUInteger itemCount;
