@@ -24,6 +24,7 @@
     
     BOOL bReverseMode;
     BOOL isBottom;
+    pthread_rwlock_t _isbottomLock;
 }
 
 - (id)init
@@ -37,7 +38,8 @@
         pthread_rwlock_init(&_markerLock,NULL);
  
         bReverseMode = false;
-        isBottom = false;
+        isBottom = true;
+        pthread_rwlock_init(&_isbottomLock, NULL);
     }
     return self;
 }
@@ -57,6 +59,8 @@
 - (void) setBottomState:(id)bState
 {
     isBottom = [TiUtils boolValue:bState];
+    if ( self.listView != nil )
+        [self.listView setBottomState:isBottom];
 }
 
 - (BOOL)getBottomState:(id)unused
@@ -102,6 +106,7 @@
     [_operationQueue release];
     pthread_mutex_destroy(&_operationQueueMutex);
     pthread_rwlock_destroy(&_markerLock);
+    pthread_rwlock_destroy(&_isbottomLock);
     [_sections release];
     [_markerArray release];
     [super dealloc];
@@ -630,6 +635,39 @@
             [eventObject release];
         }
         pthread_rwlock_unlock(&_markerLock);
+    }
+    
+    UITableView *tableView = self.listView.tableView;
+    if ( tableView != nil && [tableView numberOfSections] > 0 )
+    {
+        if ( isBottom == false && indexPath.row == [tableView numberOfRowsInSection:0]-1 )
+        {
+            [self FireEventIsBottom:true];
+        }
+    }
+}
+
+-(void)FireEventIsBottom:(bool)bBottom
+{
+    DebugLog(@"[INFO] listViewProxy : setFire Event isBottom status = %d, receive argument = %d", isBottom, bBottom, DEBUG);
+    if ( isBottom != bBottom )
+    {
+        isBottom = bBottom;
+        
+        if ( [self _hasListeners:@"isbottom"] )
+        {
+            int result = pthread_rwlock_tryrdlock(&_isbottomLock);
+            if ( result != 0 )
+            {
+                return;
+            }
+            NSDictionary *event = [NSDictionary dictionaryWithObjectsAndKeys:
+                                   NUMBOOL(isBottom), @"isbottom",
+                                   nil];
+            TiUIListSectionProxy * sectionProxy = [_sections objectAtIndex:0];
+            [self fireEvent:@"isbottom" withObject:event withSource:self propagate:NO reportSuccess:NO errorCode:0 message:nil];
+            pthread_rwlock_unlock(&_isbottomLock);
+        }
     }
 }
 

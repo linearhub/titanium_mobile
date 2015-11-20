@@ -26,6 +26,7 @@
 - (BOOL) getReverseMode:(id)unused;
 - (void) setBottomState:(id)bState;
 - (BOOL) getBottomState:(id)unused;
+- (void) FireEventIsBottom:(bool)bBottom;
 - (NSUInteger) getInsertItemsCountForSection:(NSUInteger)index;
 @end
 

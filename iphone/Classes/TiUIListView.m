@@ -252,7 +252,7 @@ static TiViewProxy * FindViewProxyWithBindIdContainingPoint(UIView *view, CGPoin
     
     if ( bReverseMode == true )
     {
-    	//DebugLog(@"----[INFO] ListView : getBottomState = %d", isBottom);
+    	//DebugLog(@"----[INFO] ListView.frameSizeChanged : getBottomState = %d", isBottom);
     	if (isBottom == true)
     	{
 	        if ( _tableView != nil && [_tableView numberOfSections] > 0 && [_tableView numberOfRowsInSection:0] > 0)
@@ -1501,7 +1501,7 @@ static TiViewProxy * FindViewProxyWithBindIdContainingPoint(UIView *view, CGPoin
         if ( isBottom == false )
         {
             isBottom = true;
-            [self.listViewProxy setBottomState:NUMBOOL(isBottom)];
+            [self.listViewProxy FireEventIsBottom:isBottom];
         }
     }
     
@@ -1780,6 +1780,11 @@ static TiViewProxy * FindViewProxyWithBindIdContainingPoint(UIView *view, CGPoin
 - (void)fireScrollStart:(UITableView *)tableView
 {
     if(canFireScrollStart) {
+        if(isBottom==true){
+            isBottom = false;
+            [self.listViewProxy FireEventIsBottom:isBottom];
+        }
+        
         canFireScrollStart = NO;
         canFireScrollEnd = YES;
         [self fireScrollEvent:@"scrollstart" forTableView:tableView];
@@ -1796,16 +1801,14 @@ static TiViewProxy * FindViewProxyWithBindIdContainingPoint(UIView *view, CGPoin
 {
     if ( bReverseMode == true )
     {
-    	//DebugLog(@"----[INFO] listView: checkBottomState");
-    	
-    	int nVisibleRow = 0;
+    	long nVisibleRow = 0;
         NSArray *visibleRows = [_tableView indexPathsForVisibleRows];
         
         if ( visibleRows != nil )
         {
             for( int i = 0; i < visibleRows.count; i++ )
             {
-                int tempRow = [visibleRows[i] row];
+                long tempRow = [visibleRows[i] row];
                 if ( nVisibleRow < tempRow )
                     nVisibleRow = tempRow;
             }
@@ -1818,6 +1821,9 @@ static TiViewProxy * FindViewProxyWithBindIdContainingPoint(UIView *view, CGPoin
             else{
                 isBottom = false;
             }
+
+            [self.listViewProxy FireEventIsBottom:isBottom];
+            //DebugLog(@"----[INFO] listView: checkBottomState isBottom=%d", isBottom);
         }
     }
 }
