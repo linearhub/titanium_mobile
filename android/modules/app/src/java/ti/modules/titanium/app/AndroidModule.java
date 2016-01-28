@@ -15,6 +15,7 @@ import org.appcelerator.kroll.common.Log;
 import org.appcelerator.titanium.TiApplication;
 import org.appcelerator.titanium.TiBaseActivity;
 import org.appcelerator.titanium.TiContext;
+import org.appcelerator.titanium.TiC;
 import org.appcelerator.titanium.proxy.ActivityProxy;
 import org.appcelerator.titanium.proxy.IntentProxy;
 import org.appcelerator.titanium.proxy.RProxy;
@@ -25,6 +26,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import java.util.ArrayList;
 
 @Kroll.module(parentModule=AppModule.class)
@@ -139,15 +141,15 @@ public class AndroidModule extends KrollModule
 	@Kroll.method
 	public void requestPermissions(String[] permissionArgs, @Kroll.argument(optional=true)KrollFunction permissionCallback)
 	{
-        List<string> mPermissions = new ArrayList<string>();
+		ArrayList<String> mPermissions = new ArrayList<String>();
          
         Activity currentActivity = TiApplication.getInstance().getCurrentActivity();
 		if (TiBaseActivity.generalCallbackContext == null) {
 			TiBaseActivity.generalCallbackContext = getKrollObject();
 		}
 
-		for(int i=0 ; i < permissions.length ; i++){
-			String permission = permissions[i];
+		for(int i=0 ; i < permissionArgs.length ; i++){
+			String permission = permissionArgs[i];
 			if (ContextCompat.checkSelfPermission(currentActivity, permission) != PackageManager.PERMISSION_GRANTED) {
 				mPermissions.add(permission);
 			}
