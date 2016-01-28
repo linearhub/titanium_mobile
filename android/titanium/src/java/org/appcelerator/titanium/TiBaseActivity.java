@@ -95,7 +95,8 @@ public abstract class TiBaseActivity extends AppCompatActivity
 
 	public static KrollObject storageCallbackContext, cameraCallbackContext, contactsCallbackContext, oldCalendarCallbackContext, calendarCallbackContext, locationCallbackContext;
 	public static KrollFunction storagePermissionCallback, cameraPermissionCallback, contactsPermissionCallback, oldCalendarPermissionCallback, calendarPermissionCallback, locationPermissionCallback;
-
+	public static KrollObject generalCallbackContext;
+	public static KrollFunction generalPermissionCallback;
 	protected View layout;
 	protected TiActivitySupportHelper supportHelper;
 	protected int supportHelperId = -1;
@@ -471,7 +472,10 @@ public abstract class TiBaseActivity extends AppCompatActivity
 				permissionCallback(grantResults, storagePermissionCallback, storageCallbackContext, "Storage");
 				return;
 			}
-
+			case TiC.PERMISSION_CODE_GENERAL: {
+				permissionCallback(grantResults, generalPermissionCallback, generalCallbackContext, "General");
+				return;
+			}
 		}
 	}
 
