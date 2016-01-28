@@ -8,6 +8,8 @@ package ti.modules.titanium.app;
 
 import org.appcelerator.kroll.KrollModule;
 import org.appcelerator.kroll.KrollRuntime;
+import org.appcelerator.kroll.KrollDict;
+import org.appcelerator.kroll.KrollFunction;
 import org.appcelerator.kroll.annotations.Kroll;
 import org.appcelerator.kroll.common.Log;
 import org.appcelerator.titanium.TiApplication;
@@ -20,7 +22,10 @@ import org.appcelerator.titanium.proxy.RProxy;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.support.v4.app.ActivityCompat;
+import java.util.ArrayList;
 
 @Kroll.module(parentModule=AppModule.class)
 public class AndroidModule extends KrollModule
@@ -130,5 +135,36 @@ public class AndroidModule extends KrollModule
 	{
 		return "Ti.App.Android";
 	}
+	
+	@Kroll.method
+	public void requestPermissions(String[] permissionArgs, @Kroll.argument(optional=true)KrollFunction permissionCallback)
+	{
+        List<string> mPermissions = new ArrayList<string>();
+         
+        Activity currentActivity = TiApplication.getInstance().getCurrentActivity();
+		if (TiBaseActivity.generalCallbackContext == null) {
+			TiBaseActivity.generalCallbackContext = getKrollObject();
+		}
+
+		for(int i=0 ; i < permissions.length ; i++){
+			String permission = permissions[i];
+			if (ContextCompat.checkSelfPermission(currentActivity, permission) != PackageManager.PERMISSION_GRANTED) {
+				mPermissions.add(permission);
+			}
+		}
+		if(mPermissions.size()==0){
+			if(permissionCallback!=null){
+				KrollDict response = new KrollDict();
+				response.putCodeAndMessage(0, null);
+				permissionCallback.callAsync(TiBaseActivity.generalCallbackContext, response);
+			}
+			return;
+		}
+
+		String[] permissions = mPermissions.toArray(new String[mPermissions.size()]);
+		TiBaseActivity.generalPermissionCallback = permissionCallback;
+		
+		currentActivity.requestPermissions(permissions, TiC.PERMISSION_CODE_GENERAL);
+	}	
 }
 
