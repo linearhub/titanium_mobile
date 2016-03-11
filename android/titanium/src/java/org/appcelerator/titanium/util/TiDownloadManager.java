@@ -9,6 +9,7 @@ package org.appcelerator.titanium.util;
 import java.io.InputStream;
 import java.lang.ref.SoftReference;
 import java.net.URI;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.ExecutorService;
@@ -142,7 +143,7 @@ public class TiDownloadManager implements Handler.Callback
 			try {
 				// all we want to do is instigate putting this into the cache, and this
 				// is enough for that:
-				InputStream stream = uri.toURL().openStream();
+				//InputStream stream = uri.toURL().openStream();
 				URLConnection conn = uri.toURL().openConnection();
 				conn.setUseCaches(nocache);
 				InputStream stream = conn.getInputStream();
