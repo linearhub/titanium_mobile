@@ -771,7 +771,11 @@ DEFINE_EXCEPTIONS
 				{
 					cacheable = NO;
 				}
-			}
+                BOOL nocache = [TiUtils boolValue:[[req userInfo] valueForKey:@"nocache"] def:NO];
+                if (nocache) {
+                    cacheable = NO;
+                }
+            }
 		}
 		
         // Previously, we were creating the image here, then caching the image, then setting the data.
