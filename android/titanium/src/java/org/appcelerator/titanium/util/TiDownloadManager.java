@@ -52,7 +52,15 @@ public class TiDownloadManager implements Handler.Callback
 		threadPool = Executors.newFixedThreadPool(THREAD_POOL_SIZE);
 	}
 
-	public void download(URI uri, TiDownloadListener listener, boolean nocache = false)
+	public void download(URI uri, TiDownloadListener listener)
+	{
+		if (TiResponseCache.peek(uri)) {
+			sendMessage(uri, MSG_FIRE_DOWNLOAD_FINISHED);
+		} else {
+			startDownload(uri, listener, false);
+		}
+	}
+	public void download(URI uri, TiDownloadListener listener, boolean nocache)
 	{
 		if (TiResponseCache.peek(uri)) {
 			sendMessage(uri, MSG_FIRE_DOWNLOAD_FINISHED);
@@ -68,7 +76,7 @@ public class TiDownloadManager implements Handler.Callback
 		msg.sendToTarget();
 	}
 
-	protected void startDownload(URI uri, TiDownloadListener listener, boolean nocache = false)
+	protected void startDownload(URI uri, TiDownloadListener listener, boolean nocache)
 	{
 		String hash = DigestUtils.shaHex(uri.toString());
 		ArrayList<SoftReference<TiDownloadListener>> listenerList = null;
@@ -121,9 +129,9 @@ public class TiDownloadManager implements Handler.Callback
 	protected class DownloadJob implements Runnable
 	{
 		protected URI uri;
-		boolean nocache = false;
+		boolean nocache;
 
-		public DownloadJob(URI uri, boolean nocache = false)
+		public DownloadJob(URI uri, boolean nocache)
 		{
 			this.uri = uri;
 			this.nocache = nocache;
