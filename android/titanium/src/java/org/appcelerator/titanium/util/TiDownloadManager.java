@@ -145,7 +145,7 @@ public class TiDownloadManager implements Handler.Callback
 				// is enough for that:
 				//InputStream stream = uri.toURL().openStream();
 				URLConnection conn = uri.toURL().openConnection();
-				conn.setUseCaches(nocache);
+				conn.setUseCaches(!nocache);
 				InputStream stream = conn.getInputStream();
 
 				KrollStreamHelper.pump(stream, null);
