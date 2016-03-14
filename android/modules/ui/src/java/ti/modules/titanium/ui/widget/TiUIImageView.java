@@ -747,6 +747,7 @@ public class TiUIImageView extends TiUIView implements OnLifecycleEvent, Handler
 
 				// Check if the image is not cached in disc and the uri is valid.
 				if ( proxy.hasProperty("nocache") && TiConvert.toBoolean(proxy.getProperty("nocache")) ) {
+					Log.d(TAG, "ImageView nocache!!", Log.DEBUG_MODE);
 					TiDownloadManager.getInstance().download(uri, downloadListener, true);
 				}
 				else{
