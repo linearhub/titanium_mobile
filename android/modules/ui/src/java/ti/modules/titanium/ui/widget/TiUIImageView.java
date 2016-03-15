@@ -746,19 +746,16 @@ public class TiUIImageView extends TiUIView implements OnLifecycleEvent, Handler
 				}
 
 				// Check if the image is not cached in disc and the uri is valid.
-				Log.d(TAG, "ImageView nocache hasProperty=" + proxy.hasProperty("nocache") + ",value=" + TiConvert.toBoolean(proxy.getProperty("nocache")), Log.DEBUG_MODE);
-				if ( proxy.hasProperty("nocache") && TiConvert.toBoolean(proxy.getProperty("nocache")) ) {
-					Log.d(TAG, "ImageView nocache!!", Log.DEBUG_MODE);
-					TiDownloadManager.getInstance().download(uri, downloadListener, true);
-				}
-				else{
-					if (!isCachedInDisk && uri != null) {
-						TiDownloadManager.getInstance().download(uri, downloadListener);
-					} else {
-						// If the image has been cached in disk or the uri is not valid,
-						// fetch and cache it and update the UI.
-						TiLoadImageManager.getInstance().load(imageref, loadImageListener);
+				if (!isCachedInDisk && uri != null) {
+					if ( proxy.hasProperty("nocache") && TiConvert.toBoolean(proxy.getProperty("nocache")) ) {
+						TiResponseCache.setNoCache(uri);
 					}
+					
+					TiDownloadManager.getInstance().download(uri, downloadListener);
+				} else {
+					// If the image has been cached in disk or the uri is not valid,
+					// fetch and cache it and update the UI.
+					TiLoadImageManager.getInstance().load(imageref, loadImageListener);
 				}
 			} else {
 				TiLoadImageManager.getInstance().load(imageref, loadImageListener);
@@ -819,6 +816,9 @@ public class TiUIImageView extends TiUIView implements OnLifecycleEvent, Handler
 		if (d.containsKey(TiC.PROPERTY_DEFAULT_IMAGE)) {
 			setDefaultImageSource(d.get(TiC.PROPERTY_DEFAULT_IMAGE));
 		}
+		if (d.containsKey("nocache")) {
+			getProxy().setProperty("nocache", d.get("nocache"));
+		}
 		if (d.containsKey(TiC.PROPERTY_IMAGE)) {
 			// processProperties is also called from TableView, we need check if we changed before re-creating the
 			// bitmap
@@ -867,6 +867,9 @@ public class TiUIImageView extends TiUIView implements OnLifecycleEvent, Handler
 		TiImageView view = getView();
 		if (view == null) {
 			return;
+		}
+		if (key.equals("nocache")) {
+			proxy.setProperty("nocache", newValue);
 		}
 
 		if (key.equals(TiC.PROPERTY_ENABLE_ZOOM_CONTROLS)) {

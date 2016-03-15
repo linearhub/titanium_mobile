@@ -58,15 +58,7 @@ public class TiDownloadManager implements Handler.Callback
 		if (TiResponseCache.peek(uri)) {
 			sendMessage(uri, MSG_FIRE_DOWNLOAD_FINISHED);
 		} else {
-			startDownload(uri, listener, false);
-		}
-	}
-	public void download(URI uri, TiDownloadListener listener, boolean nocache)
-	{
-		if (TiResponseCache.peek(uri)) {
-			sendMessage(uri, MSG_FIRE_DOWNLOAD_FINISHED);
-		} else {
-			startDownload(uri, listener, nocache);
+			startDownload(uri, listener);
 		}
 	}
 
@@ -77,7 +69,7 @@ public class TiDownloadManager implements Handler.Callback
 		msg.sendToTarget();
 	}
 
-	protected void startDownload(URI uri, TiDownloadListener listener, boolean nocache)
+	protected void startDownload(URI uri, TiDownloadListener listener)
 	{
 		String hash = DigestUtils.shaHex(uri.toString());
 		ArrayList<SoftReference<TiDownloadListener>> listenerList = null;
@@ -99,7 +91,7 @@ public class TiDownloadManager implements Handler.Callback
 		synchronized (downloadingURIs) {
 			if (!downloadingURIs.contains(hash)) {
 				downloadingURIs.add(hash);
-				threadPool.execute(new DownloadJob(uri, nocache));
+				threadPool.execute(new DownloadJob(uri));
 			}
 		}
 	}
@@ -130,12 +122,10 @@ public class TiDownloadManager implements Handler.Callback
 	protected class DownloadJob implements Runnable
 	{
 		protected URI uri;
-		boolean nocache;
 
-		public DownloadJob(URI uri, boolean nocache)
+		public DownloadJob(URI uri)
 		{
 			this.uri = uri;
-			this.nocache = nocache;
 		}
 
 		public void run()
@@ -143,10 +133,7 @@ public class TiDownloadManager implements Handler.Callback
 			try {
 				// all we want to do is instigate putting this into the cache, and this
 				// is enough for that:
-				//InputStream stream = uri.toURL().openStream();
-				URLConnection conn = uri.toURL().openConnection();
-				conn.setUseCaches(!nocache);
-				InputStream stream = conn.getInputStream();
+				InputStream stream = uri.toURL().openStream();
 
 				KrollStreamHelper.pump(stream, null);
 				stream.close();
