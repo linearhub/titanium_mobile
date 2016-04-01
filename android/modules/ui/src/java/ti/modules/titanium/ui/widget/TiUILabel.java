@@ -98,6 +98,16 @@ public class TiUILabel extends TiUIView
 			}
 			
 			@Override
+			public boolean performLongClick(){
+				try{
+					return super.performLongClick();
+				}
+				catch(Exception e){
+					return true;
+				}
+			}
+			
+			@Override
 			public boolean onTouchEvent(MotionEvent event) {
 				TextView textView = (TextView) this;
 				Object text = textView.getText();
