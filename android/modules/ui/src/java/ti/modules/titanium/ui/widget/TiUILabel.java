@@ -81,6 +81,16 @@ public class TiUILabel extends TiUIView
 			}
 			
 			@Override
+			public boolean performLongClick(){
+				try{
+					return super.performLongClick();
+				}
+				catch(Exception e){
+					return true;
+				}
+			}
+			
+			@Override
 			public boolean onTouchEvent(MotionEvent event) {
 			        TextView textView = (TextView) this;
 			        Object text = textView.getText();
@@ -105,8 +115,7 @@ public class TiUILabel extends TiUIView
 			                int line = layout.getLineForVertical(y);
 			                int off = layout.getOffsetForHorizontal(line, x);
 
-			                ClickableSpan[] link = buffer.getSpans(off, off,
-			                        ClickableSpan.class);
+			                ClickableSpan[] link = buffer.getSpans(off, off, ClickableSpan.class);
 
 							if (link.length != 0) {
 								ClickableSpan cSpan = link[0]; 
@@ -126,7 +135,7 @@ public class TiUILabel extends TiUIView
 			            }
 
 			        }
-			        return super.onTouchEvent(event);
+		    		return super.onTouchEvent(event);
 			    }
 		};
 		tv.setGravity(Gravity.CENTER_VERTICAL | Gravity.LEFT);
