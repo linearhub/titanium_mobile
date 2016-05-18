@@ -368,7 +368,7 @@ public class IntentProxy extends KrollProxy
 	}
 
 	@Kroll.method @Kroll.getProperty
-	public String getDatas()
+	public String[] getDatas()
 	{
 		if(intent.getData()!=null){
 			return new String[]{intent.getDataString()};
