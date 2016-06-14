@@ -379,7 +379,7 @@ public class IntentProxy extends KrollProxy
             if (clipData != null) {
                 for (int i = 0; i < clipData.getItemCount(); i++) {
                     ClipData.Item item = clipData.getItemAt(i);
-                    if(item && item.getUri()){
+                    if(item!=null && item.getUri()!=null){
                     	list.add(item.getUri().toString());
                     }
                 }
