@@ -1110,7 +1110,10 @@ public class TiListView extends TiUIView implements OnSearchChangeListener {
 					@Override
 					public void run()
 					{
-						listView.setSelection(position + 1);
+						//hscho crash예외처리
+						if(listView!=null){
+							listView.setSelection(position + 1);
+						}
 					}
 				});
 			}
