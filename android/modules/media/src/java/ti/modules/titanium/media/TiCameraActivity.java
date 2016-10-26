@@ -95,6 +95,8 @@ public class TiCameraActivity extends TiBaseActivity implements SurfaceHolder.Ca
 	private static MediaRecorder recorder;
 	private static File videoFile = null;
 
+	private static boolean blockAutoFocus = false;
+	
 	private static class PreviewLayout extends FrameLayout
 	{
 		private double aspectRatio = 1;
@@ -707,6 +709,9 @@ public class TiCameraActivity extends TiBaseActivity implements SurfaceHolder.Ca
 					{
 						public void onAutoFocus(boolean success, Camera camera)
 						{
+		                	if(blockAutoFocus) return;
+		                	blockAutoFocus = true;
+
 							try {
 								camera.takePicture(shutterCallback, null, jpegCallback);
 							} catch (Exception e) {
@@ -724,6 +729,7 @@ public class TiCameraActivity extends TiBaseActivity implements SurfaceHolder.Ca
 							}
 						}
 					};
+	            blockAutoFocus = false;
 					camera.autoFocus(focusCallback);
 				} else {
 					camera.takePicture(shutterCallback, null, jpegCallback);
